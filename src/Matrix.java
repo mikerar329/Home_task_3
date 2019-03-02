@@ -1,5 +1,5 @@
-import java.util.ArrayList;
 import java.util.Random;
+
 
 public class Matrix {
     private double[][] matrix;
@@ -8,7 +8,7 @@ public class Matrix {
         matrix = new double[n][m];
     }
 
-    void rndFill(int a, int b) {
+    void randomFill(int a, int b) {
         Random random = new Random();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++)
@@ -79,7 +79,7 @@ public class Matrix {
                 1.0 / (matrix.length * matrix[0].length)))));
     }
 
-    void tranporate() {
+    void transporate() {
         double transpMatrix[][] = new double[matrix[0].length][matrix.length];
 
         for (int i = 0; i < matrix.length; i++) {
@@ -91,45 +91,69 @@ public class Matrix {
         output(transpMatrix);
     }
 
-    void findLocalMaxMin(){
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                if(localMax(i, j)) {
-                    System.out.print(i + " " + j);
-                    continue;
+    void findLocalMaxMin() {
+        int i = 0;
+        int j = 0;
+        boolean stopMin = true;
+        boolean stopMax = true;
+        for (i = 0; i < matrix.length && (stopMin || stopMax); i++) {
+            for (j = 0; j < matrix[0].length && (stopMin || stopMax); j++) {
+                if (localMin(i, j) && stopMin) {
+                    System.out.println("LocalMin is " +  String.format("%.7g  ", (matrix[i][j])));
+                    stopMin = false;
+                }
+                if (localMax(i, j) && stopMax) {
+                    System.out.println("LocalMax is " +  String.format("%.7g  ", (matrix[i][j])));
+                    stopMax = false;
+                }
+            }
+        }
+        System.out.println();
+        if (stopMax) {
+            System.out.println("There is no localMax");
+            System.exit(0);
+        }
+        if (stopMin) {
+            System.out.println("There is no localMin");
+            System.exit(0);
+        }
+
+    }
+
+    private boolean localMin(int i, int j) {
+        double value = matrix[i][j];
+        boolean isLocalMin = true;
+        for (int col = j - 1; col < j + 2 && isLocalMin; col++) {
+            for (int str = i - 1; str < i + 2 && isLocalMin; str++) {
+                if (col >= 0 &&
+                        str >= 0 &&
+                        col < matrix[0].length &&
+                        str < matrix.length &&
+                        value > matrix[str][col]) {
+                    isLocalMin = false;
                 }
             }
 
-            System.out.print("\n");
         }
+        return isLocalMin;
     }
 
-
-    public boolean localMin(int i, int j) {
-        if (i == 0 && j == 0 || i == matrix.length - 1 && j == matrix[0].length - 1
-                || i == 0 && j == matrix[0].length - 1 || i == matrix.length - 1 && j == 0) {
-            return false;
-        }
-        if (i == 0 || j == 0 || i == matrix.length || j == matrix[0].length) {
-            for (int ii = 1; i < matrix.length - 2; i++) {
-
+    private boolean localMax(int i, int j) {
+        double value = matrix[i][j];
+        boolean isLocalMax = true;
+        for (int col = j - 1; col < j + 2 && isLocalMax; col++) {
+            for (int str = i - 1; str < i + 2 && isLocalMax; str++) {
+                if (col >= 0 &&
+                        str >= 0 &&
+                        col < matrix[0].length &&
+                        str < matrix.length &&
+                        value < matrix[str][col]) {
+                    isLocalMax = false;
+                }
             }
+
         }
-        return false;
+        return isLocalMax;
     }
-
-    public boolean localMax(int i, int j) {
-        double n = matrix.length;
-        double m = matrix[0].length;
-
-        ArrayList<Double> neighbours = new ArrayList<>(8);
-        for (int x = Math.max(i-1, 0); x >= Math.min(i+1, n-1); ++x)
-            for (int y = Math.max(j-1, 0); y >= Math.min(i+1, m-1); ++y)
-                for (Double v : neighbours)
-                    if (matrix[i][j] <= v)
-                        return false;
-        return true;
-    }
-
 
 }
