@@ -1,14 +1,14 @@
 import java.util.Random;
 
 
-public class Matrix {
+class Matrix {
     private double[][] matrix;
 
     Matrix(int n, int m) {
         matrix = new double[n][m];
     }
 
-    void randomFill(int a, int b) {
+    void randomFill(double a, double b) {
         Random random = new Random();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++)
@@ -35,7 +35,7 @@ public class Matrix {
     }
 
     private double getMaxElement() {
-        double maxElement = 0;
+        double maxElement = matrix[0][0];
         for (double[] aMatrix : matrix) {
             for (int j = 0; j < matrix[0].length; j++) {
                 if (aMatrix[j] > maxElement) {
@@ -92,18 +92,16 @@ public class Matrix {
     }
 
     void findLocalMaxMin() {
-        int i = 0;
-        int j = 0;
         boolean stopMin = true;
         boolean stopMax = true;
-        for (i = 0; i < matrix.length && (stopMin || stopMax); i++) {
-            for (j = 0; j < matrix[0].length && (stopMin || stopMax); j++) {
+        for (int i = 0; i < matrix.length && (stopMin || stopMax); i++) {
+            for (int j = 0; j < matrix[0].length && (stopMin || stopMax); j++) {
                 if (localMin(i, j) && stopMin) {
-                    System.out.println("LocalMin is " +  String.format("%.7g  ", (matrix[i][j])));
+                    System.out.println("The first localMin is " +  String.format("%.7g  ", (matrix[i][j])));
                     stopMin = false;
                 }
                 if (localMax(i, j) && stopMax) {
-                    System.out.println("LocalMax is " +  String.format("%.7g  ", (matrix[i][j])));
+                    System.out.println("The first localMax is " +  String.format("%.7g  ", (matrix[i][j])));
                     stopMax = false;
                 }
             }
